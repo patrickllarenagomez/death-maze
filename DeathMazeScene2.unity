@@ -246,7 +246,7 @@ MonoBehaviour:
 
     RED - DAMAGE
 
-    WHITE - BREATH GAUGE
+    WHITE - STAMINA GAUGE
 
 '
 --- !u!222 &153088987
@@ -309,7 +309,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 2800000, guid: ff6190ab5a6bbca40ad95816bdbcd23e, type: 3}
+  m_Texture: {fileID: 2800000, guid: 79865b476dfb3204d936af1d1e0570da, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -543,7 +543,7 @@ MonoBehaviour:
 
     RED - DAMAGE
 
-    WHITE - BREATH GAUGE
+    WHITE - STAMINA GAUGE
 
 '
 --- !u!222 &580971457
@@ -620,7 +620,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "CONTROLS:\nw - forward\t  A - STRAFE LEFT\ns - backward\t  D - STRAFE RIGHT\nSPACE
-    - RUN\n-------------------------------------\n"
+    - RUN\t  E - MARK POSITION\n-------------------------------------\n"
 --- !u!222 &592730874
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1040,7 +1040,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "CONTROLS:\nw - forward\t  A - STRAFE LEFT\ns - backward\t  D - STRAFE RIGHT\nSPACE
-    - RUN\n-------------------------------------\n"
+    - RUN\t  E - MARK POSITION\n-------------------------------------\n"
 --- !u!222 &1396111782
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1472,7 +1472,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Breath:'
+  m_Text: 'Stamina:'
 --- !u!222 &1881559635
 CanvasRenderer:
   m_ObjectHideFlags: 0

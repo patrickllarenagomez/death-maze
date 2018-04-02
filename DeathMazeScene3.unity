@@ -714,6 +714,11 @@ Prefab:
       propertyPath: m_AnchoredPosition.y
       value: 308.9552
       objectReference: {fileID: 0}
+    - target: {fileID: 114826518594230918, guid: 391417748eade704c8304d36ad665e46,
+        type: 2}
+      propertyPath: m_Text
+      value: 'Stamina:'
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 391417748eade704c8304d36ad665e46, type: 2}
   m_IsPrefabParent: 0
@@ -813,7 +818,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 521956937}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.679, y: 1, z: -1.67}
+  m_LocalPosition: {x: -0.679, y: 1, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 234926652}
@@ -1080,7 +1085,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400050, guid: ba24e610e0a338545b447ff44a3cf1cc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0
+      value: -4.33
       objectReference: {fileID: 0}
     - target: {fileID: 400050, guid: ba24e610e0a338545b447ff44a3cf1cc, type: 3}
       propertyPath: m_LocalRotation.x
@@ -2742,6 +2747,8 @@ MonoBehaviour:
   breathBar: {fileID: 1470189152}
   healthBar: {fileID: 2107290479}
   responseScreen: {fileID: 199067431}
+  escapeZone: {fileID: 1889753724}
+  escapeTransform: {fileID: 0}
   isCleared: 0
 --- !u!54 &1818310822
 Rigidbody:

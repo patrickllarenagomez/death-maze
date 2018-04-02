@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class timer : MonoBehaviour {
 
@@ -11,7 +12,9 @@ public class timer : MonoBehaviour {
     public GameObject healthBar;
 
     private Text showText;
+
     float countdown = 300f;
+
     float TimerCountdown;
     int minutes, seconds;
 
@@ -22,6 +25,11 @@ public class timer : MonoBehaviour {
     {
         characterScript = character.GetComponent<CharacterScript>();
         showText = timerText.GetComponent<Text>();
+        int currentStage = SceneManager.GetActiveScene().buildIndex;
+        if (currentStage == 3)
+            countdown = 600f;
+        else if (currentStage == 4)
+            countdown = 1200f;
     }
 
     // Update is called once per frame

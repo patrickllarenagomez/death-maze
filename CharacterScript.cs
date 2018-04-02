@@ -20,10 +20,10 @@ public class CharacterScript : MonoBehaviour
     float _runningSpeed = 2.0f;
     float time = 0;
     float timeRecoverBreath = 0;
-    float timeInTrap = 0;
+    float timeInTrap = 0f;
 
     float needleEnterDamage = .03f;
-    float needleStayDamage = .02f;
+    float needleStayDamage = .01f;
     float cutterEnterDamage = .04f;
     float cutterStayDamage = .02f;
     float sawEnterDamage = .04f;
@@ -36,10 +36,14 @@ public class CharacterScript : MonoBehaviour
     public GameObject breathBar;
     public GameObject healthBar;
     public GameObject responseScreen;
+    public GameObject escapeZone;
+
 
     private breathScript BreathScript;
     private healthScript HealthScript;
     private TypeOutScript responseScript;
+
+    public Transform escapeTransform;
 
     public bool isCleared = false;
 
@@ -51,6 +55,7 @@ public class CharacterScript : MonoBehaviour
     bool audioOneIsPlaying = false;
     bool audioTwoIsPlaying = false;
     bool audioThreeIsPlaying = false;
+    bool isCharacterDead = false;
 
     Renderer rend;
 
@@ -65,15 +70,18 @@ public class CharacterScript : MonoBehaviour
         responseScript = responseScreen.GetComponent<TypeOutScript>();
         audios = characterObject.GetComponents<AudioSource>();
         rend = characterObject.GetComponent<Renderer>();
-
+        escapeTransform = escapeZone.GetComponent<Transform>();
         walking = audios[0];
         running = audios[1];
         damagetaken = audios[2];
+
     }
 
     // Update is called once per frame
     void Update ()
     {
+        if (characterRigidbody.IsSleeping())
+            characterRigidbody.WakeUp();
         Movement();
     }
 
@@ -121,14 +129,14 @@ public class CharacterScript : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.A)
             || Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.Space))
         {
-                audioOneIsPlaying = false;
-                walking.Pause();
-                walking.loop = false;
+            audioOneIsPlaying = false;
+            walking.Pause();
+            walking.loop = false;
 
-                audioTwoIsPlaying = false;
-                running.Pause();
-                running.loop = false;
-         }
+            audioTwoIsPlaying = false;
+            running.Pause();
+            running.loop = false;
+        }
 
         // backwards
         else if (Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.Space))
@@ -180,7 +188,7 @@ public class CharacterScript : MonoBehaviour
                 runningSFX();
 
             time += Time.deltaTime;
-            if(time > .3)
+            if (time > .3)
             {
                 breath -= .05f;
                 time = 0;
@@ -221,10 +229,14 @@ public class CharacterScript : MonoBehaviour
                 transform.Translate(Vector3.right * _runningSpeed * Time.deltaTime);
             }
         }
+        else if (Input.GetKeyDown(KeyCode.E))
+            mark();
+        else if (Input.GetKey(KeyCode.Escape))
+            cheat_finish();
         //standby
         else
         {
-            RecoverBreath();   
+            RecoverBreath();
             animation.Play(animationName[2]);
         }
     }
@@ -259,17 +271,17 @@ public class CharacterScript : MonoBehaviour
 
         if (coll.gameObject.tag == "needleTrap")
         {
-                health -= needleEnterDamage;
-                HealthScript.updateHealthBar(health);
-                GameObject obj = (GameObject)Instantiate(Resources.Load("Blood"), transform.position, transform.rotation);
-                damageTakenSFX();
-                Destroy(obj, 1.0f);
+            health -= needleEnterDamage;
+            updateHealth(health);
+            GameObject obj = (GameObject)Instantiate(Resources.Load("Blood"), transform.position, transform.rotation);
+            damageTakenSFX();
+            Destroy(obj, 1.0f);
         }
 
         if (coll.gameObject.tag == "cutterTrap")
         {
             health -= cutterEnterDamage;
-            HealthScript.updateHealthBar(health);
+            updateHealth(health);
             GameObject obj = (GameObject)Instantiate(Resources.Load("Blood"), transform.position, transform.rotation);
             damageTakenSFX();
             Destroy(obj, 1.0f);
@@ -278,7 +290,7 @@ public class CharacterScript : MonoBehaviour
         if (coll.gameObject.tag == "spear")
         {
             health -= spearEnterDamage;
-            HealthScript.updateHealthBar(health);
+            updateHealth(health);
             GameObject obj = (GameObject)Instantiate(Resources.Load("Blood"), transform.position, transform.rotation);
             damageTakenSFX();
             Destroy(obj, 1.0f);
@@ -287,7 +299,7 @@ public class CharacterScript : MonoBehaviour
         if (coll.gameObject.tag == "blade")
         {
             health -= bladeEnterDamage;
-            HealthScript.updateHealthBar(health);
+            updateHealth(health);
             GameObject obj = (GameObject)Instantiate(Resources.Load("Blood"), transform.position, transform.rotation);
             damageTakenSFX();
             Destroy(obj, 1.0f);
@@ -296,7 +308,7 @@ public class CharacterScript : MonoBehaviour
         if (coll.gameObject.tag == "axeTrap")
         {
             health -= axeEnterDamage;
-            HealthScript.updateHealthBar(health);
+            updateHealth(health);
             GameObject obj = (GameObject)Instantiate(Resources.Load("Blood"), transform.position, transform.rotation);
             damageTakenSFX();
             Destroy(obj, 1.0f);
@@ -305,58 +317,74 @@ public class CharacterScript : MonoBehaviour
         if (coll.gameObject.tag == "greatAxeTrap")
         {
             health -= greatAxeEnterDamage;
-            HealthScript.updateHealthBar(health);
+            updateHealth(health);
             GameObject obj = (GameObject)Instantiate(Resources.Load("Blood"), transform.position, transform.rotation);
             damageTakenSFX();
             Destroy(obj, 1.0f);
         }
 
-        if (health < 0)
+        if (health < 0 && isCharacterDead == false)
+        {
             characterDeath();
+            isCharacterDead = true;
+        }
     }
 
     void OnCollisionStay(Collision coll)
     {
-        timeInTrap = Time.deltaTime;
-
+        timeInTrap += Time.deltaTime;
         if (coll.gameObject.tag == "needleTrap")
         {
-            if(timeInTrap > .3f)
+            if (timeInTrap > .5f)
             {
                 health -= needleStayDamage;
-                HealthScript.updateHealthBar(health);
-                GameObject obj =(GameObject) Instantiate(Resources.Load("Blood"), transform.position, transform.rotation);
+                updateHealth(health);
+                GameObject obj = (GameObject)Instantiate(Resources.Load("Blood"), transform.position, transform.rotation);
                 damageTakenSFX();
                 Destroy(obj, 1.0f);
+                timeInTrap = 0;
             }
         }
 
         if (coll.gameObject.tag == "cutterTrap")
         {
-            if (timeInTrap > .3f)
+            if (timeInTrap > .5f)
             {
                 health -= cutterStayDamage;
-                HealthScript.updateHealthBar(health);
+                updateHealth(health);
                 GameObject obj = (GameObject)Instantiate(Resources.Load("Blood"), transform.position, transform.rotation);
                 damageTakenSFX();
                 Destroy(obj, 1.0f);
+                timeInTrap = 0;
             }
         }
 
         if (coll.gameObject.tag == "sawTrap")
         {
-            if (timeInTrap > .3f)
+            if (timeInTrap > .5f)
             {
                 health -= sawStayDamage;
-                HealthScript.updateHealthBar(health);
+                updateHealth(health);
                 GameObject obj = (GameObject)Instantiate(Resources.Load("Blood"), transform.position, transform.rotation);
                 damageTakenSFX();
                 Destroy(obj, 1.0f);
+                timeInTrap = 0;
             }
         }
 
-        if (health < 0)
+        if (health < 0 && isCharacterDead == false)
+        {
             characterDeath();
+            isCharacterDead = true;
+        }
+    }
+
+    void updateHealth(float health)
+    {
+        if (health > 0)
+            HealthScript.updateHealthBar(health);
+        else
+            HealthScript.updateHealthBar(0);
     }
 
     void walkingSFX()
@@ -378,6 +406,11 @@ public class CharacterScript : MonoBehaviour
             running.loop = true;
             audioTwoIsPlaying = true;
         }
+    }
+
+    void mark()
+    {
+        Instantiate(Resources.Load("arrow"), new Vector3(transform.position.x, -.12f, transform.position.z), transform.rotation);
     }
 
     void damageTakenSFX()
@@ -405,7 +438,12 @@ public class CharacterScript : MonoBehaviour
             transform.localScale = new Vector3(0f,0f,0f);
             StartCoroutine(menuStage());
         }
+    }
 
+    void cheat_finish()
+    {
+        Vector3 escapeZoneCoords = escapeTransform.transform.position;
+        characterRigidbody.transform.position = escapeZoneCoords;
     }
 
     IEnumerator menuStage()
