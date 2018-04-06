@@ -21523,22 +21523,22 @@ Prefab:
     - target: {fileID: 224085737680009292, guid: 391417748eade704c8304d36ad665e46,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 29
+      value: 131.70001
       objectReference: {fileID: 0}
     - target: {fileID: 224765750105194458, guid: 391417748eade704c8304d36ad665e46,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 29
+      value: 131.7
       objectReference: {fileID: 0}
     - target: {fileID: 224157176246651924, guid: 391417748eade704c8304d36ad665e46,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 29
+      value: 131.70001
       objectReference: {fileID: 0}
     - target: {fileID: 224638994439145988, guid: 391417748eade704c8304d36ad665e46,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 29
+      value: 131.70001
       objectReference: {fileID: 0}
     - target: {fileID: 224085737680009292, guid: 391417748eade704c8304d36ad665e46,
         type: 2}
